@@ -57,10 +57,10 @@ class BasicLayout extends React.PureComponent {
   getPageTitle() {
     const { location, getRouteData } = this.props;
     const { pathname } = location;
-    let title = 'Ant Design Pro';
+    let title = '目博科技';
     getRouteData('BasicLayout').forEach((item) => {
       if (item.path === pathname) {
-        title = `${item.name} - Ant Design Pro`;
+        title = `${item.name} - 目博科技`;
       }
     });
     return title;
@@ -117,21 +117,21 @@ class BasicLayout extends React.PureComponent {
             </div>
             <GlobalFooter
               links={[{
-                title: 'Pro 首页',
-                href: 'http://pro.ant.design',
+                title: '官方首页',
+                href: 'http://www.movebroad.cn/',
                 blankTarget: true,
               }, {
-                title: 'GitHub',
-                href: 'https://github.com/ant-design/ant-design-pro',
+                title: '解决方案',
+                href: 'http://www.movebroad.cn/a/about/',
                 blankTarget: true,
               }, {
-                title: 'Ant Design',
-                href: 'http://ant.design',
+                title: '联系我们',
+                href: 'http://www.movebroad.cn/a/contact/',
                 blankTarget: true,
               }]}
               copyright={
                 <div>
-                  Copyright <Icon type="copyright" /> 2017 蚂蚁金服体验技术部出品
+                  Copyright <Icon type="copyright" /> 2017 目博科技出品
                 </div>
               }
             />

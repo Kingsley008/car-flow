@@ -38,6 +38,19 @@ export const getNavData = app => [
         ],
       },
       {
+        name:'车流量检测',
+        path:'flow',
+        icon:'dashboard',
+        children:[
+          {
+            name:'Cross-Id:17091608',
+            path:'id17091608',
+            component:dynamicWrapper(app, ['flow'], ()=> import('../routes/Dashboard/Flow')),
+
+          }
+        ]
+      },
+      {
         name: '表单页',
         path: 'form',
         icon: 'form',
