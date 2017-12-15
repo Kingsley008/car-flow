@@ -1,4 +1,4 @@
-{
+/*{
   "parser": "babel-eslint",
   "extends": "airbnb",
   "plugins": ["compat"],
@@ -55,4 +55,4 @@
   "settings": {
     "polyfills": ["fetch"]
   }
-}
+}*/

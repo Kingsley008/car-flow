@@ -73,7 +73,7 @@ export default class Login extends Component {
       <div className={styles.main}>
         <Form onSubmit={this.handleSubmit}>
           <Tabs animated={false} className={styles.tabs} activeKey={type} onChange={this.onSwitch}>
-            <TabPane tab="账户密码登录" key="account">
+            <TabPane tab="Login-账号密码登录" key="account">
               {
                 login.status === 'error' &&
                 login.type === 'account' &&
@@ -108,7 +108,7 @@ export default class Login extends Component {
                 )}
               </FormItem>
             </TabPane>
-            <TabPane tab="手机号登录" key="mobile">
+{/*            <TabPane tab="手机号登录" key="mobile">
               {
                 login.status === 'error' &&
                 login.type === 'mobile' &&
@@ -157,7 +157,7 @@ export default class Login extends Component {
                   </Col>
                 </Row>
               </FormItem>
-            </TabPane>
+            </TabPane>*/}
           </Tabs>
           <FormItem className={styles.additional}>
             {getFieldDecorator('remember', {
@@ -166,20 +166,19 @@ export default class Login extends Component {
             })(
               <Checkbox className={styles.autoLogin}>自动登录</Checkbox>
             )}
-            <a className={styles.forgot} href="">忘记密码</a>
+{/*            <a className={styles.forgot} href="">忘记密码</a>*/}
             <Button size="large" loading={login.submitting} className={styles.submit} type="primary" htmlType="submit">
               登录
             </Button>
           </FormItem>
         </Form>
-        <div className={styles.other}>
+{/*        <div className={styles.other}>
           其他登录方式
-          {/* 需要加到 Icon 中 */}
           <span className={styles.iconAlipay} />
           <span className={styles.iconTaobao} />
           <span className={styles.iconWeibo} />
           <Link className={styles.register} to="/user/register">注册账户</Link>
-        </div>
+        </div>*/}
       </div>
     );
   }
