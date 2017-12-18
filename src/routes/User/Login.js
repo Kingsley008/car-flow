@@ -10,7 +10,9 @@ const { TabPane } = Tabs;
 @connect(state => ({
   login: state.login,
 }))
+
 @Form.create()
+
 export default class Login extends Component {
   state = {
     count: 0,
@@ -35,7 +37,7 @@ export default class Login extends Component {
         clearInterval(this.interval);
       }
     }, 1000);
-  }
+  };
 
   handleSubmit = (e) => {
     e.preventDefault();

@@ -43,9 +43,15 @@ export const getNavData = app => [
         icon:'dashboard',
         children:[
           {
-            name:'Cross-Id:17091608',
-            path:'id17091608',
-            component:dynamicWrapper(app, ['flow'], ()=> import('../routes/Dashboard/Flow')),
+            name:'车流量-Table 1',
+            path:'table1',
+            component:dynamicWrapper(app, ['flowtableone'], ()=> import('../routes/Dashboard/FlowTableOne')),
+
+          },
+          {
+            name:'车流量-Table 2',
+            path:'table2',
+            component:dynamicWrapper(app, ['flowtabletwo'], ()=> import('../routes/Dashboard/FlowTableTwo')),
 
           }
         ]

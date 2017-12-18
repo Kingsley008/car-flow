@@ -14,15 +14,18 @@ export default {
         type: 'changeSubmitting',
         payload: true,
       });
+
       const response = yield call(fakeAccountLogin, payload);
       yield put({
         type: 'changeLoginStatus',
         payload: response,
       });
+
       // Login successfully
       if (response.status === 'ok') {
         yield put(routerRedux.push('/'));
       }
+
     },
     *logout(_, { put }) {
       yield put({
