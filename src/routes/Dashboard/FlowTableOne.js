@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { routerRedux } from 'dva/router';
 import {connect} from 'dva';
 import {Button, Form, InputNumber, Select, Table} from 'antd';
 
@@ -52,13 +53,19 @@ const columns = [{
 @connect((state) => ({
   flowState: state.flowTableOne.flow,
   crossID: state.flowTableOne.crossID,
+  userName:state.login.userName,
 }))
-
 
 @Form.create()
 export default class FlowTableOne extends Component {
   constructor(props) {
     super(props);
+    if(this.props.userName === null){
+      this.props.dispatch({
+        type:'login/invalidLogin'
+      })
+    }
+
     this.props.dispatch({
       type: 'flowTableOne/fetchCrossID',
     });
@@ -183,7 +190,7 @@ export default class FlowTableOne extends Component {
               <span style={{marginLeft: 0, marginTop: 5}}>条数据</span>
             </FormItem>
             <FormItem>
-              <Button style={{marginLeft: 20, marginRight: 20}} type="primary" htmlType="submit">Search</Button>
+              <Button style={{marginLeft: 20, marginRight: 20}} type="primary" htmlType="submit" loading={this.props.loading}>Search</Button>
             </FormItem>
           </div>
         </Form>

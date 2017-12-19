@@ -1,4 +1,4 @@
-import { query as queryUsers, queryCurrent } from '../services/user';
+import { queryCurrent } from '../services/flow';
 
 export default {
   namespace: 'user',
@@ -6,7 +6,12 @@ export default {
   state: {
     list: [],
     loading: false,
-    currentUser: {},
+    currentUser: {
+      name: 'Serati Ma',
+      avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
+      userid: '00000001',
+      notifyCount: 0,
+    },
   },
 
   effects: {
@@ -15,7 +20,8 @@ export default {
         type: 'changeLoading',
         payload: true,
       });
-      const response = yield call(queryUsers);
+
+      //const response = yield call(queryUsers);
       yield put({
         type: 'save',
         payload: response,
@@ -25,13 +31,15 @@ export default {
         payload: false,
       });
     },
-    *fetchCurrent(_, { call, put }) {
-      const response = yield call(queryCurrent);
-      yield put({
-        type: 'saveCurrentUser',
-        payload: response,
-      });
-    },
+
+    // *fetchCurrent({ call, put }) {
+    //   const response = yield call(queryCurrent);
+    //   console.log(response, 'fetchCurrent');
+    //   yield put({
+    //     type: 'saveCurrentUser',
+    //     payload: response,
+    //   });
+    // },
   },
 
   reducers: {

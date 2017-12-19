@@ -6,11 +6,11 @@ export default {
   state: {
     flow: [],
     crossID:[],
-    total_page:0
+    total_page:0,
+    loading:false,
   },
 
   effects: {
-
     * fetchCrossID(_, {call, put}){
       const response = yield call(queryAllCrossID);
       yield put({
@@ -21,8 +21,12 @@ export default {
 
     * fetchFlowByRange({payload}, {call, put}) {
       console.log('fetch');
+      yield put({
+        type:'addLoading',
+      });
       // param playload.cross_id  playload.lane_start playload.lane_end playload.time_start playload.time_end
       const response = yield call(queryRangeByLaneAndTime,payload);
+
       let  res = [];
       let total_count = response.pop().total_count;
       console.log(response, total_count);
@@ -30,6 +34,7 @@ export default {
       response.forEach((v)=>{
         res.push(v.CrossTrafficData)
       });
+
       yield put({
         type: 'saveRangeFlow',
         payload: res,
@@ -38,6 +43,9 @@ export default {
       yield put({
         type: 'savePageCount',
         payload: total_count,
+      });
+      yield put({
+        type:'hideLoading',
       });
     },
   },
@@ -64,6 +72,18 @@ export default {
       return {
         ...state,
         total_page: action.payload
+      }
+    },
+    addLoading(state){
+      return{
+        ...state,
+        loading:true
+      }
+    },
+    hideLoading(state){
+      return{
+        ...state,
+        loading:false
       }
     }
   },

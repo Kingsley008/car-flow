@@ -15,7 +15,7 @@ export const getNavData = app => [
     name: '首页', // for breadcrumb
     path: '/',
     children: [
-      {
+/*      {
         name: 'Dashboard',
         icon: 'dashboard',
         path: 'dashboard',
@@ -36,7 +36,7 @@ export const getNavData = app => [
             component: dynamicWrapper(app, ['project', 'activities', 'chart'], () => import('../routes/Dashboard/Workplace')),
           },
         ],
-      },
+      },*/
       {
         name:'车流量检测',
         path:'flow',
@@ -56,7 +56,7 @@ export const getNavData = app => [
           }
         ]
       },
-      {
+   /*   {
         name: '表单页',
         path: 'form',
         icon: 'form',
@@ -87,7 +87,7 @@ export const getNavData = app => [
             component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/AdvancedForm')),
           },
         ],
-      },
+      },*/
       {
         name: '列表页',
         path: 'list',

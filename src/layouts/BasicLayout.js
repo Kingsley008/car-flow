@@ -1,17 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Layout, Icon } from 'antd';
+import {Icon, Layout} from 'antd';
 import DocumentTitle from 'react-document-title';
-import { connect } from 'dva';
-import { Route, Redirect, Switch } from 'dva/router';
-import { ContainerQuery } from 'react-container-query';
+import {connect} from 'dva';
+import {Redirect, Route, Switch} from 'dva/router';
+import {ContainerQuery} from 'react-container-query';
 import classNames from 'classnames';
 import GlobalHeader from '../components/GlobalHeader';
 import GlobalFooter from '../components/GlobalFooter';
 import SiderMenu from '../components/SiderMenu';
 import NotFound from '../routes/Exception/404';
 
-const { Content } = Layout;
+const {Content} = Layout;
 
 const query = {
   'screen-xs': {
@@ -34,13 +34,18 @@ const query = {
   },
 };
 
+@connect((state) => ({
+  userName: state.login.userName,
+}))
+
 class BasicLayout extends React.PureComponent {
   static childContextTypes = {
     location: PropTypes.object,
     breadcrumbNameMap: PropTypes.object,
-  }
+  };
+
   getChildContext() {
-    const { location, navData, getRouteData } = this.props;
+    const {location, navData, getRouteData} = this.props;
     const routeData = getRouteData('BasicLayout');
     const firstMenuData = navData.reduce((arr, current) => arr.concat(current.children), []);
     const menuData = this.getMenuData(firstMenuData, '');
@@ -52,11 +57,12 @@ class BasicLayout extends React.PureComponent {
         component: item.component,
       };
     });
-    return { location, breadcrumbNameMap };
+    return {location, breadcrumbNameMap};
   }
+
   getPageTitle() {
-    const { location, getRouteData } = this.props;
-    const { pathname } = location;
+    const {location, getRouteData} = this.props;
+    const {pathname} = location;
     let title = '目博科技';
     getRouteData('BasicLayout').forEach((item) => {
       if (item.path === pathname) {
@@ -65,17 +71,27 @@ class BasicLayout extends React.PureComponent {
     });
     return title;
   }
+
   getMenuData = (data, parentPath) => {
     let arr = [];
     data.forEach((item) => {
       if (item.children) {
-        arr.push({ path: `${parentPath}/${item.path}`, name: item.name });
+        arr.push({path: `${parentPath}/${item.path}`, name: item.name});
         arr = arr.concat(this.getMenuData(item.children, `${parentPath}/${item.path}`));
       }
     });
     return arr;
-  }
+  };
+
   render() {
+    // 判断当前用户是否登入
+    let URL = '';
+    const userName = this.props.userName;
+    if (userName != null) {
+      URL = '/flow/table1'
+    } else {
+      URL = '/user/login'
+    }
     const {
       currentUser, collapsed, fetchingNotices, notices, getRouteData, navData, location, dispatch,
     } = this.props;
@@ -96,8 +112,8 @@ class BasicLayout extends React.PureComponent {
             collapsed={collapsed}
             dispatch={dispatch}
           />
-          <Content style={{ margin: '24px 24px 0', height: '100%' }}>
-            <div style={{ minHeight: 'calc(100vh - 260px)' }}>
+          <Content style={{margin: '24px 24px 0', height: '100%'}}>
+            <div style={{minHeight: 'calc(100vh - 260px)'}}>
               <Switch>
                 {
                   getRouteData('BasicLayout').map(item =>
@@ -111,8 +127,8 @@ class BasicLayout extends React.PureComponent {
                     )
                   )
                 }
-                <Redirect exact from="/" to="/dashboard/analysis" />
-                <Route component={NotFound} />
+                <Redirect exact from="/" to={URL}/>
+                <Route component={NotFound}/>
               </Switch>
             </div>
             <GlobalFooter
@@ -131,7 +147,7 @@ class BasicLayout extends React.PureComponent {
               }]}
               copyright={
                 <div>
-                  Copyright <Icon type="copyright" /> 2017 目博科技出品
+                  Copyright <Icon type="copyright"/> 2017 目博科技出品
                 </div>
               }
             />

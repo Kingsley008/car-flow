@@ -5,6 +5,7 @@ export default {
   namespace: 'flowTableOne',
   state: {
     flow: [],
+    loading:false,
   },
 
   effects: {
@@ -20,6 +21,9 @@ export default {
     * fetchFlow({payload}, {call, put}) {
       console.log('fetch');
       // param: cross_id,lane,last
+      yield put({
+        type: 'addLoading',
+      });
       const response = yield call(queryLaneLastMinutes,payload);
       let  res = [];
       response.forEach((v)=>{
@@ -30,6 +34,10 @@ export default {
         type: 'saveFlow',
         payload: res,
       });
+
+      yield put({
+        type:'hideLoading',
+      })
 
     },
   },
@@ -47,6 +55,18 @@ export default {
       return {
         ...state,
         crossID:action.payload
+      }
+    },
+    addLoading(state){
+      return{
+        ...state,
+        loading:true
+      }
+    },
+    hideLoading(state){
+      return{
+        ...state,
+        loading:false
       }
     }
   },

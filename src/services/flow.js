@@ -3,9 +3,28 @@ import request from '../utils/request';
 const key = 'http://localhost:4002/api/method=get&appkey=436etaq52e57a3cd028ab56b&seckey=sec-mj12Slu12w1Xs1er8ZzmGZqw5qrpFmqw25jHULr13eUZCswA';
 
 
-export async function queryLaneLastMinutes(playload) {
+// TODO 加密 cors 暂时使用get
+export async function accountLogin(payload) {
 
-  return request(`${key}/cross/${playload.cross_id}/lane/${playload.lane}/last/${playload.last}`,{
+  return request(`${key}/login/account/${payload.userName}/${payload.password}`, {
+    method:'GET',
+    mode:'cors',
+    credentials: "",
+  })
+}
+
+export async function queryCurrent(payload) {
+
+  return request(`${key}/currentUser`,{
+    method:'GET',
+    mode:'cors',
+    credentials: "",
+  });
+}
+
+export async function queryLaneLastMinutes(payload) {
+
+  return request(`${key}/cross/${payload.cross_id}/lane/${payload.lane}/last/${payload.last}`,{
     method:'GET',
     mode:'cors',
     credentials: "",
@@ -24,14 +43,13 @@ export async function queryAllCrossID() {
 
 }
 // playload.cross_id  playload.lane_start playload.lane_end playload.time_start playload.time_end
-export async function queryRangeByLaneAndTime(playload) {
+export async function queryRangeByLaneAndTime(payload) {
 
-  return request(`${key}/cross/${playload.cross_id}/lane/lanestart=${playload.lane_start}&laneend=${playload.lane_end}/start=${playload.time_start}&end=${playload.time_end}`,{
+  return request(`${key}/cross/${payload.cross_id}/lane/lanestart=${payload.lane_start}&laneend=${payload.lane_end}/start=${payload.time_start}&end=${payload.time_end}/${playload.currentPage}`,{
     method:'GET',
     mode:'cors',
     credentials: "",
     cache: 'default',
   });
-
 }
 

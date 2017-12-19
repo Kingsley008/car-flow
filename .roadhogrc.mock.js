@@ -66,13 +66,13 @@ const proxy = {
   'GET /api/fake_chart_data': getFakeChartData,
   'GET /api/profile/basic': getProfileBasicData,
   'GET /api/profile/advanced': getProfileAdvancedData,
-  'POST /api/login/account': (req, res) => {
+/*  'POST /api/login/account': (req, res) => {
     const {password, userName, type} = req.body;
     res.send({
       status: password === '888888' && userName === 'admin' ? 'ok' : 'error',
       type,
     });
-  },
+  },*/
   'POST /api/register': (req, res) => {
     res.send({status: 'ok'});
   },

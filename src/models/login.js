@@ -1,21 +1,23 @@
-import { routerRedux } from 'dva/router';
-import { fakeAccountLogin } from '../services/api';
+import {routerRedux} from 'dva/router';
+import {accountLogin} from "../services/flow";
 
 export default {
   namespace: 'login',
 
   state: {
     status: undefined,
+    userName: null,
   },
 
   effects: {
-    *login({ payload }, { call, put }) {
+    * login({payload}, {call, put}) {
+      console.log(payload);
       yield put({
         type: 'changeSubmitting',
         payload: true,
       });
 
-      const response = yield call(fakeAccountLogin, payload);
+      const response = yield call(accountLogin, payload);
       yield put({
         type: 'changeLoginStatus',
         payload: response,
@@ -23,11 +25,17 @@ export default {
 
       // Login successfully
       if (response.status === 'ok') {
+        yield put({
+          type: 'addUserName',
+          payload: response,
+        });
+
         yield put(routerRedux.push('/'));
+        console.log('push')
       }
 
     },
-    *logout(_, { put }) {
+    * logout(_, {put}) {
       yield put({
         type: 'changeLoginStatus',
         payload: {
@@ -36,10 +44,14 @@ export default {
       });
       yield put(routerRedux.push('/user/login'));
     },
+    * invalidLogin(_, {put}) {
+      yield put(routerRedux.push('/user/login'));
+    }
   },
 
+
   reducers: {
-    changeLoginStatus(state, { payload }) {
+    changeLoginStatus(state, {payload}) {
       return {
         ...state,
         status: payload.status,
@@ -47,11 +59,18 @@ export default {
         submitting: false,
       };
     },
-    changeSubmitting(state, { payload }) {
+    changeSubmitting(state, {payload}) {
       return {
         ...state,
         submitting: payload,
       };
     },
+    addUserName(state, {payload}) {
+      return {
+        ...state,
+        userName: payload.userName,
+      }
+    },
+
   },
 };

@@ -14,10 +14,11 @@ const { TabPane } = Tabs;
 @Form.create()
 
 export default class Login extends Component {
+
   state = {
     count: 0,
     type: 'account',
-  }
+  };
 
   componentWillUnmount() {
     clearInterval(this.interval);
@@ -91,10 +92,11 @@ export default class Login extends Component {
                   <Input
                     size="large"
                     prefix={<Icon type="user" className={styles.prefixIcon} />}
-                    placeholder="admin"
+                    placeholder="user"
                   />
                 )}
               </FormItem>
+
               <FormItem>
                 {getFieldDecorator('password', {
                   rules: [{
@@ -105,7 +107,7 @@ export default class Login extends Component {
                     size="large"
                     prefix={<Icon type="lock" className={styles.prefixIcon} />}
                     type="password"
-                    placeholder="888888"
+                    placeholder="password"
                   />
                 )}
               </FormItem>
@@ -168,19 +170,11 @@ export default class Login extends Component {
             })(
               <Checkbox className={styles.autoLogin}>自动登录</Checkbox>
             )}
-{/*            <a className={styles.forgot} href="">忘记密码</a>*/}
             <Button size="large" loading={login.submitting} className={styles.submit} type="primary" htmlType="submit">
               登录
             </Button>
           </FormItem>
         </Form>
-{/*        <div className={styles.other}>
-          其他登录方式
-          <span className={styles.iconAlipay} />
-          <span className={styles.iconTaobao} />
-          <span className={styles.iconWeibo} />
-          <Link className={styles.register} to="/user/register">注册账户</Link>
-        </div>*/}
       </div>
     );
   }

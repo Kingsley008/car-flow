@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import {connect} from 'dva';
-import {Button, Form, InputNumber, Select, Table, DatePicker} from 'antd';
+import {Button, DatePicker, Form, Select, Table} from 'antd';
+import { routerRedux } from 'dva/router';
 import {total} from "../../components/Charts/Pie/index";
+
 const RangePicker = DatePicker.RangePicker;
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -13,8 +15,8 @@ const columns = [{
 },
   {
     title: '车道号',
-    dataIndex: 'LaneNO',
-    key: 'LaneNO',
+    dataIndex: 'LaneNo',
+    key: 'LaneNo',
   },
   {
   title: '交通流量（辆）',
@@ -60,16 +62,26 @@ const columns = [{
   flowState: state.flowTableTwo.flow,
   crossID: state.flowTableTwo.crossID,
   total: state.flowTableTwo.total_page,
+  userName:state.login.userName
 }))
 @Form.create()
 export default class FlowTableOne extends Component {
   constructor(props) {
     super(props);
+
+    if(this.props.userName === null){
+       this.props.dispatch({
+        type:'login/invalidLogin'
+      })
+    }
+
+    this.onChangePage = this.onChangePage.bind(this);
     // DatePicker
     this.state = {
       startValue: null,
       endValue: null,
       endOpen: false,
+      currentPage:1
     };
     // 获取cross id
     this.props.dispatch({
@@ -95,6 +107,11 @@ export default class FlowTableOne extends Component {
         console.log('Received values of form: ', values);
         values.time_start = values.range_time_picker[0];
         values.time_end = values.range_time_picker[1];
+        values.currentPage = this.state.currentPage;
+
+        this.setState({
+          values: values,
+        });
 
         this.props.dispatch({
           type: 'flowTableTwo/fetchFlowByRange',
@@ -104,10 +121,21 @@ export default class FlowTableOne extends Component {
     });
   };
 
+  onChangePage(pageNumber){
+    this.state.values.currentPage = pageNumber;
+    this.state.currentPage = pageNumber;
+    this.props.dispatch({
+      type: 'flowTableTwo/fetchFlowByRange',
+      payload: this.state.values,
+    });
+  }
+
   // 处理表单提交
   render() {
     console.log(this.props.total);
-    //  TODO  Loding  const {submitting} = this.props;
+    // 设置分页的思路
+    let pageConfig = false;
+
     const {getFieldDecorator, getFieldValue} = this.props.form;
     // 设置CrossID
     let crossIDs = this.props.crossID || [];
@@ -117,6 +145,7 @@ export default class FlowTableOne extends Component {
     if (crossIDs != 0) {
       crossOption = crossIDs.map(id => <Option key={id}>{id}</Option>);
     }
+
     // 设置车道号 TODO 暂时写死
     for (let i = 1; i <= 25; i++) {
 
@@ -139,12 +168,12 @@ export default class FlowTableOne extends Component {
       let obj = {
         key: i,
         DateTime: v.DateTime,
+        LaneNo:tempData.LaneNo,
         Volume: tempData.Volume,
         AvgOccupancy: tempData.AvgOccupancy,
         AvgHeadTime: tempData.AvgHeadTime,
         AvgLength: tempData.AvgLength,
         AvgSpeed: tempData.AvgSpeed,
-        LaneNO:tempData.LaneNO,
       };
       dataSource.push(obj)
     });
@@ -213,13 +242,23 @@ export default class FlowTableOne extends Component {
             </FormItem>
 
             <FormItem>
-              <Button style={{ marginRight: 20}} type="primary" htmlType="submit">Search</Button>
+              <Button style={{ marginRight: 20}} type="primary" htmlType="submit" loading={this.props.loading}>Search</Button>
             </FormItem>
 
           </div>
         </Form>
-        {/*  TODO 分页   Pagination ={} */}
-        <Table columns={columns} dataSource={dataSource}/>
+
+        <Table
+          pagination={{
+          total: this.props.total,
+          current: this.state.currentPage,
+            onChange: (page) => {
+             this.onChangePage(page)
+            }
+          }}
+          columns={columns}
+          dataSource={dataSource}
+          loading = {this.props.loading}/>
       </div>
     )
   }

@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import {connect} from 'dva';
 import { Layout, Menu, Icon, Spin, Tag, Dropdown, Avatar, message } from 'antd';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
@@ -9,11 +10,26 @@ import styles from './index.less';
 
 const { Header } = Layout;
 
+// TODO 设置 user API
+@connect((state) => ({
+  userName:state.login.userName,
+}))
 export default class GlobalHeader extends PureComponent {
+
+  constructor(props){
+    super(props);
+    // this.props.dispatch({
+    //   type: 'user/fetchCurrent',
+    //   userName:this.props.userName,
+    // });
+
+  }
   componentDidMount() {
-    this.props.dispatch({
-      type: 'user/fetchCurrent',
-    });
+
+    // this.props.dispatch({
+    //   type: 'user/fetchCurrent',
+    //   userName:this.props.userName,
+    // });
   }
   componentWillUnmount() {
     this.triggerResizeEvent.cancel();
@@ -101,7 +117,7 @@ export default class GlobalHeader extends PureComponent {
           onClick={this.toggle}
         />
         <div className={styles.right}>
-          <HeaderSearch
+{/*          <HeaderSearch
             className={`${styles.action} ${styles.search}`}
             placeholder="站内搜索"
             dataSource={['搜索提示一', '搜索提示二', '搜索提示三']}
@@ -149,7 +165,7 @@ export default class GlobalHeader extends PureComponent {
                 {currentUser.name}
               </span>
             </Dropdown>
-          ) : <Spin size="small" style={{ marginLeft: 8 }} />}
+          ) : <Spin size="small" style={{ marginLeft: 8 }} />}*/}
         </div>
       </Header>
     );
