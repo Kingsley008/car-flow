@@ -1,13 +1,12 @@
-import {queryRangeByLaneAndTime ,queryAllCrossID} from '../services/flow';
+import {queryRangeById, queryAllCrossID} from '../services/flow';
 
 
 export default {
-  namespace: 'flowTableTwo',
+  namespace: 'flowTableThree',
   state: {
     flow: [],
-    crossID:[],
-    total_page:0,
     loading:false,
+    currentPage:1,
   },
 
   effects: {
@@ -19,24 +18,23 @@ export default {
       })
     },
 
-    * fetchFlowByRange({payload}, {call, put}) {
-
+    * fetchFlowById({payload}, {call, put}) {
+      console.log('fetch');
+      // param: cross_id,lane,last
       yield put({
-        type:'addLoading',
+        type: 'addLoading',
       });
-      // param playload.cross_id  playload.lane_start playload.lane_end playload.time_start playload.time_end
-      const response = yield call(queryRangeByLaneAndTime,payload);
-      console.log('end fetch');
+      const response = yield call(queryRangeById,payload);
       let  res = [];
       let total_count = response.pop().total_count;
-      console.log(response, total_count);
 
       response.forEach((v)=>{
         res.push(v.CrossTrafficData)
       });
 
+
       yield put({
-        type: 'saveRangeFlow',
+        type: 'saveFlow',
         payload: res,
       });
 
@@ -44,16 +42,17 @@ export default {
         type: 'savePageCount',
         payload: total_count,
       });
+
       yield put({
         type:'hideLoading',
-      });
+      })
+
     },
   },
 
   reducers: {
-    saveRangeFlow(state, action) {
+    saveFlow(state, action) {
       // TODO 解构赋值
-
       state.flow = null;
       return {
         ...state,
@@ -64,15 +63,6 @@ export default {
       return {
         ...state,
         crossID:action.payload
-      }
-    },
-    savePageCount(state, action) {
-
-      state.total_page = 0;
-      console.log(action);
-      return {
-        ...state,
-        total_page: action.payload
       }
     },
     addLoading(state){
@@ -86,6 +76,15 @@ export default {
         ...state,
         loading:false
       }
-    }
+    },
+    savePageCount(state, action) {
+
+      state.total_page = 0;
+      console.log(action);
+      return {
+        ...state,
+        total_page: action.payload
+      }
+    },
   },
 };

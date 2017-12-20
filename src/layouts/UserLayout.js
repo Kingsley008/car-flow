@@ -51,7 +51,7 @@ class UserLayout extends React.PureComponent {
                 <span className={styles.title}>目博科技</span>
               </Link>
             </div>
-            <div className={styles.desc}>车流量可视化平台</div>
+            <div className={styles.desc}>车流量可视化平台-Bate</div>
           </div>
           {
             getRouteData('UserLayout').map(item =>

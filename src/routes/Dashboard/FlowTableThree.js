@@ -1,33 +1,33 @@
 import React, {Component} from 'react';
 import {connect} from 'dva';
 import {Button, DatePicker, Form, Select, Table} from 'antd';
-import { routerRedux } from 'dva/router';
+import {routerRedux} from 'dva/router';
 import {total} from "../../components/Charts/Pie/index";
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-
 const RangePicker = DatePicker.RangePicker;
 const Option = Select.Option;
 const FormItem = Form.Item;
 
-const columns = [{
-  title: '检测截止时间',
-  dataIndex: 'DateTime',
-  key: 'DateTime',
-},
+const columns = [
+  {
+    title: '检测截止时间',
+    dataIndex: 'DateTime',
+    key: 'DateTime',
+  },
   {
     title: '车道号',
     dataIndex: 'LaneNo',
     key: 'LaneNo',
   },
   {
-  title: '交通流量（辆）',
-  dataIndex: 'Volume',
-  key: 'Volume',
-}, {
-  title: '平均占有时间（毫秒）',
-  dataIndex: 'AvgOccupancy',
-  key: 'AvgOccupancy',
-},
+    title: '交通流量（辆）',
+    dataIndex: 'Volume',
+    key: 'Volume',
+  }, {
+    title: '平均占有时间（毫秒）',
+    dataIndex: 'AvgOccupancy',
+    key: 'AvgOccupancy',
+  },
   {
     title: '平均车头时距（毫秒）',
     dataIndex: 'AvgHeadTime',
@@ -49,35 +49,34 @@ const columns = [{
 
 
 @connect((state) => ({
-  flowState: state.flowTableTwo.flow,
-  crossID: state.flowTableTwo.crossID,
-  total: state.flowTableTwo.total_page,
-  loading:state.flowTableTwo.loading,
-  userName:state.login.userName
+  flowState: state.flowTableThree.flow,
+  crossID: state.flowTableThree.crossID,
+  total: state.flowTableThree.total_page,
+  userName: state.login.userName,
+  loading: state.flowTableThree.loading,
 }))
+
 @Form.create()
-export default class FlowTableTwo extends Component {
+export default class FlowTableThree extends Component {
   constructor(props) {
     super(props);
-
-    if(this.props.userName === null){
-       this.props.dispatch({
-        type:'login/invalidLogin'
+    if (this.props.userName === null) {
+      this.props.dispatch({
+        type: 'login/invalidLogin'
       })
     }
 
+    this.props.dispatch({
+      type: 'flowTableThree/fetchCrossID',
+    });
     this.onChangePage = this.onChangePage.bind(this);
     // DatePicker
     this.state = {
       startValue: null,
       endValue: null,
       endOpen: false,
-      currentPage:1
+      currentPage: 1
     };
-    // 获取cross id
-    this.props.dispatch({
-      type: 'flowTableTwo/fetchCrossID',
-    });
 
   }
 
@@ -100,8 +99,9 @@ export default class FlowTableTwo extends Component {
         values.time_end = values.range_time_picker[1];
         values.currentPage = this.state.currentPage;
 
+        console.log(values);
         this.props.dispatch({
-          type: 'flowTableTwo/fetchFlowByRange',
+          type: 'flowTableThree/fetchFlowById',
           payload: values,
         });
 
@@ -113,19 +113,18 @@ export default class FlowTableTwo extends Component {
     });
   };
 
-  onChangePage(pageNumber){
+  onChangePage(pageNumber) {
     this.state.values.currentPage = pageNumber;
     this.state.currentPage = pageNumber;
     this.props.dispatch({
-      type: 'flowTableTwo/fetchFlowByRange',
+      type: 'flowTableThree/fetchFlowById',
       payload: this.state.values,
     });
   }
 
   // 处理表单提交
   render() {
-    // 设置分页的思路
-    let pageConfig = false;
+    const {submitting} = this.props;
 
     const {getFieldDecorator, getFieldValue} = this.props.form;
     // 设置CrossID
@@ -136,19 +135,19 @@ export default class FlowTableTwo extends Component {
     if (crossIDs != 0) {
       crossOption = crossIDs.map(id => <Option key={id}>{id}</Option>);
     }
-
     // 设置车道号 TODO 暂时写死
     for (let i = 1; i <= 25; i++) {
 
-      if(i >= 10){
+      if (i > 10) {
         i = '0' + i
-      } else if(i >= 20){
+      } else if (i > 20) {
         i = '0' + i
       } else {
-        i = '00'+ i;
+        i = '00' + i;
       }
       laneNO.push(i)
     }
+
     const laneOption = laneNO.map(i => <Option key={i}>{i}</Option>);
 
     // 设置Table数据
@@ -159,7 +158,7 @@ export default class FlowTableTwo extends Component {
       let obj = {
         key: i,
         DateTime: v.DateTime,
-        LaneNo:tempData.LaneNo,
+        LaneNo: tempData.LaneNo,
         Volume: tempData.Volume,
         AvgOccupancy: tempData.AvgOccupancy,
         AvgHeadTime: tempData.AvgHeadTime,
@@ -168,9 +167,8 @@ export default class FlowTableTwo extends Component {
       };
       dataSource.push(obj)
     });
-
     const rangeConfig = {
-      rules: [{ type: 'array', required: true, message: 'Please select time!' }],
+      rules: [{type: 'array', required: true, message: 'Please select time!'}],
     };
     return (
       <div>
@@ -195,62 +193,34 @@ export default class FlowTableTwo extends Component {
                 </Select>
               )}
             </FormItem>
-            <FormItem
-              label="开始车道号"
-            >
-              {getFieldDecorator('lane_start', {
-                rules: [{
-                  required: true, message: '请选择车道号',
-                }],
-              })(
-                <Select style={{width: 120, marginRight: 20}}>
-                  {laneOption}
-                </Select>
-              )}
-            </FormItem>
-
-            <FormItem
-              label="结束车道号"
-            >
-              {getFieldDecorator('lane_end', {
-                rules: [{
-                  required: true, message: '请选择车道号',
-                }],
-              })(
-                <Select style={{width: 120, marginRight: 20}}>
-                  {laneOption}
-                </Select>
-              )}
-            </FormItem>
 
             <FormItem>
               <FormItem
                 label="时间段"
               >
                 {getFieldDecorator('range_time_picker', rangeConfig)(
-                  <RangePicker showTime format="YYYY-MM-DD HH:mm:ss" />
+                  <RangePicker showTime format="YYYY-MM-DD HH:mm:ss"/>
                 )}
               </FormItem>
             </FormItem>
 
             <FormItem>
-              <Button style={{ marginRight: 20}} type="primary" htmlType="submit" loading={this.props.loading}>Search</Button>
+              <Button style={{marginLeft: 20, marginRight: 20}} type="primary" htmlType="submit"
+                      loading={this.props.loading}>Search</Button>
             </FormItem>
-
           </div>
         </Form>
-
         <Table
           pagination={{
-          total: this.props.total,
-          current: this.state.currentPage,
+            total: this.props.total,
+            current: this.state.currentPage,
             onChange: (page) => {
-             this.onChangePage(page)
+              this.onChangePage(page)
             }
           }}
           columns={columns}
           dataSource={dataSource}
-          loading = {this.props.loading}/>
+          loading={this.props.loading}/>
         </PageHeaderLayout>
       </div>
     )

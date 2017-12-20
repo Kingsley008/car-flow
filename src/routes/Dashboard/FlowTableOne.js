@@ -2,12 +2,13 @@ import React, {Component} from 'react';
 import { routerRedux } from 'dva/router';
 import {connect} from 'dva';
 import {Button, Form, InputNumber, Select, Table} from 'antd';
+import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 const Option = Select.Option;
 const FormItem = Form.Item;
 
 const columns = [{
-  title: '检测截至时间',
+  title: '检测截止时间',
   dataIndex: 'DateTime',
   key: 'DateTime',
 }, {
@@ -143,6 +144,7 @@ export default class FlowTableOne extends Component {
 
     return (
       <div>
+        <PageHeaderLayout title="车流量表格展示" content="">
         <Form
           onSubmit={this.handleSubmit}
           hideRequiredMark
@@ -195,6 +197,7 @@ export default class FlowTableOne extends Component {
           </div>
         </Form>
         <Table columns={columns} dataSource={dataSource}/>
+        </PageHeaderLayout>
       </div>
     )
   }

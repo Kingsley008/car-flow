@@ -53,6 +53,12 @@ export const getNavData = app => [
             path:'table2',
             component:dynamicWrapper(app, ['flowtabletwo'], ()=> import('../routes/Dashboard/FlowTableTwo')),
 
+          },
+          {
+            name:'车流量-Table 3',
+            path:'table3',
+            component:dynamicWrapper(app, ['flowtablethree'], ()=> import('../routes/Dashboard/FlowTableThree')),
+
           }
         ]
       },
@@ -88,7 +94,7 @@ export const getNavData = app => [
           },
         ],
       },*/
-      {
+/*      {
         name: '列表页',
         path: 'list',
         icon: 'table',
@@ -124,8 +130,8 @@ export const getNavData = app => [
             component: dynamicWrapper(app, ['list'], () => import('../routes/List/SearchList')),
           },
         ],
-      },
-      {
+      },*/
+     /* {
         name: '详情页',
         path: 'profile',
         icon: 'profile',
@@ -141,8 +147,8 @@ export const getNavData = app => [
             component: dynamicWrapper(app, ['profile'], () => import('../routes/Profile/AdvancedProfile')),
           },
         ],
-      },
-      {
+      },*/
+      /*{
         name: '结果',
         path: 'result',
         icon: 'check-circle-o',
@@ -158,8 +164,8 @@ export const getNavData = app => [
             component: dynamicWrapper(app, [], () => import('../routes/Result/Error')),
           },
         ],
-      },
-      {
+      },*/
+      /*{
         name: '异常',
         path: 'exception',
         icon: 'warning',
@@ -180,7 +186,7 @@ export const getNavData = app => [
             component: dynamicWrapper(app, [], () => import('../routes/Exception/500')),
           },
         ],
-      },
+      },*/
     ],
   },
   {
@@ -198,7 +204,7 @@ export const getNavData = app => [
             path: 'login',
             component: dynamicWrapper(app, ['login'], () => import('../routes/User/Login')),
           },
-          {
+/*          {
             name: '注册',
             path: 'register',
             component: dynamicWrapper(app, ['register'], () => import('../routes/User/Register')),
@@ -207,12 +213,12 @@ export const getNavData = app => [
             name: '注册结果',
             path: 'register-result',
             component: dynamicWrapper(app, [], () => import('../routes/User/RegisterResult')),
-          },
+          },*/
         ],
       },
     ],
   },
-  {
+  /*{
     component: dynamicWrapper(app, [], () => import('../layouts/BlankLayout')),
     layout: 'BlankLayout',
     children: {
@@ -221,5 +227,5 @@ export const getNavData = app => [
       target: '_blank',
       icon: 'book',
     },
-  },
+  },*/
 ];

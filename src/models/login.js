@@ -31,7 +31,6 @@ export default {
         });
 
         yield put(routerRedux.push('/'));
-        console.log('push')
       }
 
     },
@@ -55,7 +54,6 @@ export default {
       return {
         ...state,
         status: payload.status,
-        type: payload.type,
         submitting: false,
       };
     },

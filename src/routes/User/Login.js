@@ -79,7 +79,6 @@ export default class Login extends Component {
             <TabPane tab="Login-账号密码登录" key="account">
               {
                 login.status === 'error' &&
-                login.type === 'account' &&
                 login.submitting === false &&
                 this.renderMessage('账户或密码错误')
               }
@@ -164,12 +163,12 @@ export default class Login extends Component {
             </TabPane>*/}
           </Tabs>
           <FormItem className={styles.additional}>
-            {getFieldDecorator('remember', {
+    {/*        {getFieldDecorator('remember', {
               valuePropName: 'checked',
               initialValue: true,
             })(
               <Checkbox className={styles.autoLogin}>自动登录</Checkbox>
-            )}
+            )}*/}
             <Button size="large" loading={login.submitting} className={styles.submit} type="primary" htmlType="submit">
               登录
             </Button>
