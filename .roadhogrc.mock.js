@@ -12,7 +12,14 @@ const noProxy = process.env.NO_PROXY === 'true';
 // 代码中会兼容本地 service mock 以及部署站点的静态数据
 const proxy = {
   // 支持值为 Object 和 Array
-/*  'GET /api/currentUser': {
+
+  'GET /api/currentUser':{
+    name: 'momo.zxy',
+    userid:'0000001',
+    notifyCount:12
+  },
+
+ /* 'GET /api/currentUser': {
     $desc: "获取当前用户接口",
     $params: {
       pageSize: {
@@ -26,7 +33,8 @@ const proxy = {
       userid: '00000001',
       notifyCount: 12,
     },
-  },
+  },*/
+
   // GET POST 可省略
   'GET /api/users': [{
     key: '1',
@@ -65,7 +73,8 @@ const proxy = {
   'GET /api/fake_list': getFakeList,
   'GET /api/fake_chart_data': getFakeChartData,
   'GET /api/profile/basic': getProfileBasicData,
-  'GET /api/profile/advanced': getProfileAdvancedData,*/
+  'GET /api/profile/advanced': getProfileAdvancedData,
+
 /*  'POST /api/login/account': (req, res) => {
     const {password, userName, type} = req.body;
     res.send({

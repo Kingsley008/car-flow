@@ -3,6 +3,9 @@ import { routerRedux } from 'dva/router';
 import {connect} from 'dva';
 import {Button, Form, InputNumber, Select, Table} from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import list from '../../../mock/device';
+
+console.log(list);
 
 const Option = Select.Option;
 const FormItem = Form.Item;

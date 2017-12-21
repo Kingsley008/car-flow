@@ -15,28 +15,23 @@ export const getNavData = app => [
     name: '首页', // for breadcrumb
     path: '/',
     children: [
-/*      {
-        name: 'Dashboard',
-        icon: 'dashboard',
+      {
+        name: '设备信息录入',
+        icon: 'form',
         path: 'dashboard',
         children: [
           {
-            name: '分析页',
+            name: '网关信息录入',
             path: 'analysis',
             component: dynamicWrapper(app, ['chart'], () => import('../routes/Dashboard/Analysis')),
           },
           {
-            name: '监控页',
+            name: '地磁设备录入',
             path: 'monitor',
             component: dynamicWrapper(app, ['monitor'], () => import('../routes/Dashboard/Monitor')),
           },
-          {
-            name: '工作台',
-            path: 'workplace',
-            component: dynamicWrapper(app, ['project', 'activities', 'chart'], () => import('../routes/Dashboard/Workplace')),
-          },
         ],
-      },*/
+      },
       {
         name:'车流量检测',
         path:'flow',

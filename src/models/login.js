@@ -1,17 +1,18 @@
 import {routerRedux} from 'dva/router';
 import {accountLogin} from "../services/flow";
+import Cookies from 'js-cookie';
 
 export default {
-  namespace: 'login',
 
+  namespace: 'login',
   state: {
     status: undefined,
-    userName: null,
+    type:'account',
+    userName: Cookies.get('userName') || null,
   },
 
   effects: {
     * login({payload}, {call, put}) {
-      console.log(payload);
       yield put({
         type: 'changeSubmitting',
         payload: true,
@@ -69,6 +70,5 @@ export default {
         userName: payload.userName,
       }
     },
-
   },
 };
