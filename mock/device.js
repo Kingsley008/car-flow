@@ -20,10 +20,8 @@ let gateList = mockjs.mock({
     'roadName': '@ROAD', // 道路名称
     'latitude|100-200.8':1.123,
     'longitude|100-200.8':1.123,
-
     }],
 });
-
 
 
 export default  gateList;

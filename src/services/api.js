@@ -33,10 +33,9 @@ export async function addRule(params) {
   });
 }
 
-export async function fakeSubmitForm(params) {
-  return request('/api/forms', {
-    method: 'POST',
-    body: params,
+export async function fakeSubmitForm() {
+  return request('/api/save_forms', {
+    method: 'GET',
   });
 }
 

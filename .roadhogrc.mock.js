@@ -1,6 +1,7 @@
 import mockjs from 'mockjs';
 import {getRule, postRule} from './mock/rule';
 import {getActivities, getFakeList, getNotice} from './mock/api';
+import gateList from './mock/device';
 import {getFakeChartData} from './mock/chart';
 import {getProfileAdvancedData, getProfileBasicData} from './mock/profile';
 import {getNotices} from './mock/notices';
@@ -64,7 +65,7 @@ const proxy = {
     },
     $body: postRule,
   },
-  'POST /api/forms': (req, res) => {
+  'GET /api/save_forms': (req, res) => {
     res.send({message: 'Ok'});
   },
   'GET /api/tags': mockjs.mock({
@@ -74,6 +75,7 @@ const proxy = {
   'GET /api/fake_chart_data': getFakeChartData,
   'GET /api/profile/basic': getProfileBasicData,
   'GET /api/profile/advanced': getProfileAdvancedData,
+  'GET /api/gate_data':gateList
 
 /*  'POST /api/login/account': (req, res) => {
     const {password, userName, type} = req.body;

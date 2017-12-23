@@ -22,13 +22,8 @@ export const getNavData = app => [
         children: [
           {
             name: '网关信息录入',
-            path: 'analysis',
-            component: dynamicWrapper(app, ['chart'], () => import('../routes/Dashboard/Analysis')),
-          },
-          {
-            name: '地磁设备录入',
-            path: 'monitor',
-            component: dynamicWrapper(app, ['monitor'], () => import('../routes/Dashboard/Monitor')),
+            path: 'gateform',
+            component: dynamicWrapper(app, ['device'], () => import('../routes/Forms/GateForm')),
           },
         ],
       },
