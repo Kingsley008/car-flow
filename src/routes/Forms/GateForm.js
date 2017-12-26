@@ -36,11 +36,17 @@ const EditableCell = ({editable, value, onChange}) => (
   visible: state.device.visible,
   loading: state.device.loading,
   data: state.device.gateList,
+  userName: state.login.userName,
 }))
 @Form.create()
 export default class GateForm extends Component {
   constructor(props) {
     super(props);
+    if (this.props.userName === null) {
+      this.props.dispatch({
+        type: 'login/invalidLogin'
+      })
+    }
     this.columns = [{
       title: '网关号',
       dataIndex: 'cross_id',

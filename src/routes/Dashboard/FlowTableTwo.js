@@ -53,7 +53,9 @@ const columns = [{
   crossID: state.flowTableTwo.crossID,
   total: state.flowTableTwo.total_page,
   loading:state.flowTableTwo.loading,
-  userName:state.login.userName
+  laneNo:state.flowTableTwo.laneNo,
+  userName:state.login.userName,
+  roadName:state.flowTableTwo.road.road_name || '未命名道路',
 }))
 @Form.create()
 export default class FlowTableTwo extends Component {
@@ -67,6 +69,7 @@ export default class FlowTableTwo extends Component {
     }
 
     this.onChangePage = this.onChangePage.bind(this);
+    this.handleRoadName = this.handleRoadName.bind(this);
     // DatePicker
     this.state = {
       startValue: null,
@@ -112,7 +115,19 @@ export default class FlowTableTwo extends Component {
       }
     });
   };
+  handleRoadName(value){
+    console.log(value);
+    this.props.dispatch({
+      type:'flowTableTwo/fetchRoadName',
+      payload: value,
+    });
 
+    this.props.dispatch({
+      type:'flowTableTwo/fetchLaneNo',
+      payload:value
+    });
+
+  }
   onChangePage(pageNumber){
     this.state.values.currentPage = pageNumber;
     this.state.currentPage = pageNumber;
@@ -126,7 +141,6 @@ export default class FlowTableTwo extends Component {
   render() {
     // 设置分页的思路
     let pageConfig = false;
-
     const {getFieldDecorator, getFieldValue} = this.props.form;
     // 设置CrossID
     let crossIDs = this.props.crossID || [];
@@ -137,19 +151,7 @@ export default class FlowTableTwo extends Component {
       crossOption = crossIDs.map(id => <Option key={id}>{id}</Option>);
     }
 
-    // 设置车道号 TODO 暂时写死
-    for (let i = 1; i <= 25; i++) {
-
-      if(i >= 10){
-        i = '0' + i
-      } else if(i >= 20){
-        i = '0' + i
-      } else {
-        i = '00'+ i;
-      }
-      laneNO.push(i)
-    }
-    const laneOption = laneNO.map(i => <Option key={i}>{i}</Option>);
+    const laneOption = this.props.laneNo.map(i => <Option key={i}>{i}</Option>);
 
     // 设置Table数据
     const dataSource = [];
@@ -190,7 +192,7 @@ export default class FlowTableTwo extends Component {
                   required: true, message: '请输入CrossID',
                 }],
               })(
-                <Select style={{width: 120}}>
+                <Select style={{width: 120}} onSelect = {this.handleRoadName} >
                   {crossOption}
                 </Select>
               )}
@@ -203,7 +205,7 @@ export default class FlowTableTwo extends Component {
                   required: true, message: '请选择车道号',
                 }],
               })(
-                <Select style={{width: 120, marginRight: 20}}>
+                <Select style={{width: 120, marginRight: 20}} >
                   {laneOption}
                 </Select>
               )}
@@ -239,7 +241,7 @@ export default class FlowTableTwo extends Component {
 
           </div>
         </Form>
-
+          <h3>{this.props.roadName}</h3>
         <Table
           pagination={{
           total: this.props.total,

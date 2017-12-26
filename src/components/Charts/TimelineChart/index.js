@@ -8,11 +8,27 @@ class TimelineChart extends Component {
     this.renderChart(this.props.data);
   }
 
+  equal(old, target) {
+    let r = true;
+    for (const prop in old) {
+      if (typeof old[prop] === 'function' && typeof target[prop] === 'function') {
+        if (old[prop].toString() != target[prop].toString()) {
+          r = false;
+        }
+      } else if (old[prop] != target[prop]) {
+        r = false;
+      }
+    }
+    return r;
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.data !== this.props.data) {
       this.renderChart(nextProps.data);
     }
+
   }
+
 
   componentWillUnmount() {
     if (this.chart) {
@@ -54,10 +70,14 @@ class TimelineChart extends Component {
     chart.axis('x', {
       title: false,
     });
+
     chart.axis('y1', {
       title: false,
     });
-    chart.axis('y2', false);
+
+   // chart.axis('y2', false);
+
+   // chart.axis('y3',false);
 
     chart.legend({
       mode: false,
@@ -82,15 +102,17 @@ class TimelineChart extends Component {
         max,
         min: 0,
       },
-      y2: {
-        alias: titleMap.y2,
-        max,
-        min: 0,
-      },
+      // y2: {
+      //   alias: titleMap.y2,
+      //   max,
+      //   min: 0,
+      // },
     });
 
     chart.line().position('x*y1').color('#1890FF').size(borderWidth);
-    chart.line().position('x*y2').color('#2FC25B').size(borderWidth);
+   // chart.line().position('x*y2').color('#2FC25B').size(borderWidth);
+   // chart.line().position('x*y3').color('#f3980a').size(borderWidth);
+
 
     this.chart = chart;
 
@@ -112,8 +134,8 @@ class TimelineChart extends Component {
 
     return (
       <div className={styles.timelineChart} style={{ height }}>
-        <div>
-          { title && <h4>{title}</h4>}
+        <div style={{textAlign:'center'}}>
+          { title && <h2>{title}</h2>}
           <div ref={this.handleRef} />
           <div id={this.sliderId} />
         </div>

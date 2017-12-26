@@ -1,5 +1,5 @@
-import {queryRangeByLaneAndTime ,queryAllCrossID} from '../services/flow';
-
+import {queryRangeByLaneAndTime ,queryAllCrossID,findLaneNoById} from '../services/flow';
+import {findRoadNameById} from '../services/device';
 
 export default {
   namespace: 'flowTableTwo',
@@ -8,9 +8,20 @@ export default {
     crossID:[],
     total_page:0,
     loading:false,
+    road:{},
+    laneNo:[],
   },
 
   effects: {
+    * fetchLaneNo({payload}, {call, put}) {
+      const response = yield call(findLaneNoById,payload);
+      yield put({
+        type:'saveLaneNo',
+        payload:response
+      });
+
+    },
+
     * fetchCrossID(_, {call, put}){
       const response = yield call(queryAllCrossID);
       yield put({
@@ -48,13 +59,34 @@ export default {
         type:'hideLoading',
       });
     },
+
+    * fetchRoadName({payload},{call, put}) {
+      let response = yield call(findRoadNameById,payload);
+      if(!response){
+        response = {};
+        response.roadName = '未命名道路'
+      }
+      yield put({
+        type:'saveRoad',
+        payload:response,
+      })
+    },
   },
 
   reducers: {
+    saveLaneNo(state, action){
+      return {
+        ...state,
+        laneNo:action.payload
+      }
+    },
+    saveRoad(state, action) {
+      return {
+        ...state,
+        road:action.payload
+      }
+    },
     saveRangeFlow(state, action) {
-      // TODO 解构赋值
-
-      state.flow = null;
       return {
         ...state,
         flow: action.payload,

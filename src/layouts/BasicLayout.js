@@ -88,7 +88,7 @@ class BasicLayout extends React.PureComponent {
     let URL = '';
     const userName = this.props.userName;
     if (userName != null) {
-      URL = '/flow/table1'
+      URL = '/dashboard/gateform'
     } else {
       URL = '/user/login'
     }

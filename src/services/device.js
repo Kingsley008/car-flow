@@ -36,4 +36,16 @@ export async function deleteGateData(payload) {
     mode:'cors',
     credentials: "",
   })
+
 }
+
+export async function findRoadNameById(payload) {
+
+  return request(`${key}/v1/device/get_device_name/${payload}`,{
+    method:'GET',
+    mode:'cors',
+    credentials: "",
+  })
+}
+
+

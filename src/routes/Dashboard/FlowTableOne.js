@@ -1,11 +1,9 @@
 import React, {Component} from 'react';
-import { routerRedux } from 'dva/router';
+import {routerRedux} from 'dva/router';
 import {connect} from 'dva';
 import {Button, Form, InputNumber, Select, Table} from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import list from '../../../mock/device';
 
-console.log(list);
 
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -40,33 +38,25 @@ const columns = [{
     dataIndex: 'AvgSpeed',
     key: 'AvgSpeed',
   },
-  /*  {
-      title: '饱和度',
-      dataIndex: 'Saturation',
-      key: 'Saturation',
-
-    },
-    {
-    title: '密度',
-    dataIndex:'Density',
-    key: 'Density',
-    }*/
 ];
 
 
 @connect((state) => ({
   flowState: state.flowTableOne.flow,
   crossID: state.flowTableOne.crossID,
-  userName:state.login.userName,
+  userName: state.login.userName,
+  laneNo:state.flowTableOne.laneNo,
+  roadName: state.flowTableOne.road.road_name || '未命名道路',
 }))
 
 @Form.create()
 export default class FlowTableOne extends Component {
   constructor(props) {
     super(props);
-    if(this.props.userName === null){
+    this.handleRoadName = this.handleRoadName.bind(this);
+    if (this.props.userName === null) {
       this.props.dispatch({
-        type:'login/invalidLogin'
+        type: 'login/invalidLogin'
       })
     }
 
@@ -74,14 +64,19 @@ export default class FlowTableOne extends Component {
       type: 'flowTableOne/fetchCrossID',
     });
 
-/*    this.props.dispatch({
-      type: 'flow/fetchFlow',
-      payload: {
-        cross_id: 17091608,
-        lane: '001',
-        last: 10,
-      }
-    });*/
+  }
+
+  handleRoadName(value) {
+    this.props.dispatch({
+      type: 'flowTableOne/fetchRoadName',
+      payload: value,
+    });
+
+    this.props.dispatch({
+      type:'flowTableOne/fetchLaneNo',
+      payload:value
+    });
+
   }
 
   handleSubmit = (e) => {
@@ -98,11 +93,8 @@ export default class FlowTableOne extends Component {
   };
 
   // 处理表单提交
-
-
   render() {
     const {submitting} = this.props;
-
     const {getFieldDecorator, getFieldValue} = this.props.form;
     // 设置CrossID
     let crossIDs = this.props.crossID || [];
@@ -112,20 +104,7 @@ export default class FlowTableOne extends Component {
     if (crossIDs != 0) {
       crossOption = crossIDs.map(id => <Option key={id}>{id}</Option>);
     }
-    // 设置车道号 TODO 暂时写死
-    for (let i = 1; i <= 25; i++) {
-
-      if(i > 10){
-        i = '0' + i
-      } else if(i > 20){
-        i = '0' + i
-      } else {
-        i = '00'+ i;
-      }
-      laneNO.push(i)
-    }
-    const laneOption = laneNO.map(i => <Option key={i}>{i}</Option>);
-
+    const laneOption = this.props.laneNo.map(i => <Option key={i}>{i}</Option>);
     // 设置Table数据
     const dataSource = [];
     let orginalSource = this.props.flowState;
@@ -139,8 +118,6 @@ export default class FlowTableOne extends Component {
         AvgHeadTime: tempData.AvgHeadTime,
         AvgLength: tempData.AvgLength,
         AvgSpeed: tempData.AvgSpeed,
-        /*         Saturation:tempData.Saturation,
-                 Density: tempData.Density,*/
       };
       dataSource.push(obj)
     });
@@ -148,58 +125,62 @@ export default class FlowTableOne extends Component {
     return (
       <div>
         <PageHeaderLayout title="车流量表格展示" content="">
-        <Form
-          onSubmit={this.handleSubmit}
-          hideRequiredMark
-          layout="inline"
-        >
+          <Form
+            onSubmit={this.handleSubmit}
+            hideRequiredMark
+            layout="inline"
+          >
 
-          <div style={{marginBottom: 50}}>
-            <FormItem
-              label="Cross-ID"
-            >
-              {getFieldDecorator('cross_id', {
-                rules: [{
-                  required: true, message: '请输入CrossID',
-                }],
-              })(
-                <Select style={{width: 120}}>
-                  {crossOption}
-                </Select>
-              )}
-            </FormItem>
-            <FormItem
-              label="车道号"
-            >
-              {getFieldDecorator('lane', {
-                rules: [{
-                  required: true, message: '请选择车道号',
-                }],
-              })(
-                <Select style={{width: 120, marginRight: 20}}>
-                  {laneOption}
-                </Select>
-              )}
-            </FormItem>
+            <div style={{marginBottom: 50}}>
+              <FormItem
+                label="Cross-ID"
 
-            <FormItem
-              label="查看倒数"
-            >
-              {getFieldDecorator('last', {
-                rules: [{
-                  required: true, message: '请选择',
-                }],
-              })(
-                <InputNumber style={{marginLeft: 20}} max={100} min={1} placeholder ={'max 100'}/>
-              )}
-              <span style={{marginLeft: 0, marginTop: 5}}>条数据</span>
-            </FormItem>
-            <FormItem>
-              <Button style={{marginLeft: 20, marginRight: 20}} type="primary" htmlType="submit" loading={this.props.loading}>Search</Button>
-            </FormItem>
-          </div>
-        </Form>
-        <Table columns={columns} dataSource={dataSource}/>
+              >
+                {getFieldDecorator('cross_id', {
+                  rules: [{
+                    required: true, message: '请输入CrossID',
+                  }],
+                })(
+                  <Select style={{width: 120}} onSelect={this.handleRoadName}>
+                    {crossOption}
+                  </Select>
+                )}
+              </FormItem>
+
+              <FormItem
+                label="车道号"
+              >
+                {getFieldDecorator('lane', {
+                  rules: [{
+                    required: true, message: '请选择车道号',
+                  }],
+                })(
+                  <Select style={{width: 120, marginRight: 20}}>
+                    {laneOption}
+                  </Select>
+                )}
+              </FormItem>
+
+              <FormItem
+                label="查看最近"
+              >
+                {getFieldDecorator('last_minutes', {
+                  rules: [{
+                    required: true, message: '请选择',
+                  }],
+                })(
+                  <InputNumber style={{marginLeft: 20}} max={1440} min={1} placeholder={'max 24h'}/>
+                )}
+                <span style={{marginLeft: 0, marginTop: 5}}>分钟的数据</span>
+              </FormItem>
+              <FormItem>
+                <Button style={{marginLeft: 20, marginRight: 20}} type="primary" htmlType="submit"
+                        loading={this.props.loading}>Search</Button>
+              </FormItem>
+            </div>
+          </Form>
+          <h3>{this.props.roadName}</h3>
+          <Table columns={columns} dataSource={dataSource}/>
         </PageHeaderLayout>
       </div>
     )

@@ -28,7 +28,7 @@ export const getNavData = app => [
         ],
       },
       {
-        name:'车流量检测',
+        name:'车流量检测-Table',
         path:'flow',
         icon:'dashboard',
         children:[
@@ -50,6 +50,19 @@ export const getNavData = app => [
             component:dynamicWrapper(app, ['flowtablethree'], ()=> import('../routes/Dashboard/FlowTableThree')),
 
           }
+        ]
+      },
+      {
+        name:'车流量检测-Chart',
+        path:'chart',
+        icon:'dashboard',
+        children:[
+          {
+            name:'车流量-Chart 1',
+            path:'chart1',
+            component:dynamicWrapper(app, ['flowchartone'], ()=> import('../routes/Dashboard/FlowChartOne')),
+
+          },
         ]
       },
    /*   {

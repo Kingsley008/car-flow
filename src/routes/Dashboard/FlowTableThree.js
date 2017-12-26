@@ -54,12 +54,14 @@ const columns = [
   total: state.flowTableThree.total_page,
   userName: state.login.userName,
   loading: state.flowTableThree.loading,
+  roadName: state.flowTableThree.road.road_name || '未命名道路',
 }))
 
 @Form.create()
 export default class FlowTableThree extends Component {
   constructor(props) {
     super(props);
+    this.handleRoadName = this.handleRoadName.bind(this);
     if (this.props.userName === null) {
       this.props.dispatch({
         type: 'login/invalidLogin'
@@ -80,6 +82,13 @@ export default class FlowTableThree extends Component {
 
   }
 
+  handleRoadName(value) {
+    this.props.dispatch({
+      type: 'flowTableThree/fetchRoadName',
+      payload: value,
+    });
+  }
+
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, fieldsValue) => {
@@ -94,7 +103,6 @@ export default class FlowTableThree extends Component {
           ],
         };
 
-        console.log('Received values of form: ', values);
         values.time_start = values.range_time_picker[0];
         values.time_end = values.range_time_picker[1];
         values.currentPage = this.state.currentPage;
@@ -135,20 +143,8 @@ export default class FlowTableThree extends Component {
     if (crossIDs != 0) {
       crossOption = crossIDs.map(id => <Option key={id}>{id}</Option>);
     }
-    // 设置车道号 TODO 暂时写死
-    for (let i = 1; i <= 25; i++) {
 
-      if (i > 10) {
-        i = '0' + i
-      } else if (i > 20) {
-        i = '0' + i
-      } else {
-        i = '00' + i;
-      }
-      laneNO.push(i)
-    }
-
-    const laneOption = laneNO.map(i => <Option key={i}>{i}</Option>);
+   // const laneOption = this.props.laneNo.map(i => <Option key={i}>{i}</Option>);
 
     // 设置Table数据
     const dataSource = [];
@@ -188,7 +184,7 @@ export default class FlowTableThree extends Component {
                   required: true, message: '请输入CrossID',
                 }],
               })(
-                <Select style={{width: 120}}>
+                <Select style={{width: 120}} onSelect={this.handleRoadName}>
                   {crossOption}
                 </Select>
               )}
@@ -210,6 +206,7 @@ export default class FlowTableThree extends Component {
             </FormItem>
           </div>
         </Form>
+          <h3>{this.props.roadName}</h3>
         <Table
           pagination={{
             total: this.props.total,
