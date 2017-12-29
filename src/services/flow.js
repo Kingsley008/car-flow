@@ -84,4 +84,33 @@ export async function findLaneNoById(payload) {
 }
 
 
+// 查询历史某一天的数据
+export async function findHistory(payload) {
+
+  return request(`${key}/v1/carflow/cross/${payload.cross_id}/lane/${payload.lane}/history/${payload.date}`, {
+    method:'GET',
+    mode:'cors',
+    credentials:'',
+    cache:'default',
+  })
+
+}
+
+// 查询某个路口所有的车流量总和
+export async function queryTotalFlow(payload) {
+  console.log(payload)
+  let myHeaders = new Headers();
+  myHeaders.append('Content-Type', 'application/json');
+
+  return request(`${key}/v1/carflow/cross/summary`,{
+    method:'POST',
+    mode:'cors',
+    credentials:'',
+    body:payload,
+    headers:myHeaders,
+    cache:'default',
+  })
+}
+
+
 

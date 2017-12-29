@@ -61,7 +61,23 @@ export const getNavData = app => [
             name:'车流量-Chart 1',
             path:'chart1',
             component:dynamicWrapper(app, ['flowchartone'], ()=> import('../routes/Dashboard/FlowChartOne')),
-
+          },
+          {
+            name:'车流量-Chart 2',
+            path:'chart2',
+            component:dynamicWrapper(app, ['flowcharttwo'], ()=> import('../routes/Dashboard/FlowChartTwo')),
+          },
+        ]
+      },
+      {
+        name:'车流量地图-Map',
+        path:'map',
+        icon:'profile',
+        children:[
+          {
+            name:'车流量-Map 1',
+            path:'map1',
+            component:dynamicWrapper(app, ['flowmapone'], ()=> import('../routes/Dashboard/FlowMapOne')),
           },
         ]
       },

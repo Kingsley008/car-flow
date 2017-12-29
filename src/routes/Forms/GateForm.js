@@ -59,13 +59,13 @@ export default class GateForm extends Component {
       render: (text, record) => this.renderColumns(text, record, 'road_name'),
     },
       {
-        title: '经度',
+        title: '纬度',
         dataIndex: 'latitude',
         key: 3,
         render: (text, record) => this.renderColumns(text, record, 'latitude'),
       },
       {
-        title: '纬度',
+        title: '经度',
         dataIndex: 'longitude',
         key: 4,
         render: (text, record) => this.renderColumns(text, record, 'longitude'),
