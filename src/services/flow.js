@@ -98,7 +98,7 @@ export async function findHistory(payload) {
 
 // 查询某个路口所有的车流量总和
 export async function queryTotalFlow(payload) {
-  console.log(payload)
+
   let myHeaders = new Headers();
   myHeaders.append('Content-Type', 'application/json');
 
