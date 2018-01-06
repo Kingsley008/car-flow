@@ -1,6 +1,6 @@
 import request from '../utils/request';
 
-const key = 'http://localhost:4002/api/method=get&appkey=436etaq52e57a3cd028ab56b&seckey=sec-mj12Slu12w1Xs1er8ZzmGZqw5qrpFmqw25jHULr13eUZCswA';
+const key = 'http://120.78.66.248:4002/api/method=get&appkey=436etaq52e57a3cd028ab56b&seckey=sec-mj12Slu12w1Xs1er8ZzmGZqw5qrpFmqw25jHULr13eUZCswA';
 // TODO 加密 cors 暂时使用get
 export async function accountLogin(payload) {
 
